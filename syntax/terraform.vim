@@ -10,25 +10,11 @@ syn case match
 syn keyword terraSection connection output provider variable
 syn keyword terraValueBool true false on off yes no
 
-""" resource
-
+""" old resource keyword section
 " find . -name "resource_*.go" -not -name "resource_*_test.go" -not -name "resource_provider.go" | sed 's/.*\/resource_//; s/\.go$//'
-syn keyword terraResourceTypeBI
-          \ aws_autoscaling_group           aws_security_group
-          \ aws_db_instance                 aws_subnet
-          \ aws_db_security_group           aws_vpc
-          \ aws_eip                         cloudflare_record
-          \ aws_elb                         consul_keys
-          \ aws_instance                    digitalocean_domain
-          \ aws_internet_gateway            digitalocean_droplet
-          \ aws_launch_configuration        digitalocean_record
-          \ aws_route53_record              dnsimple_record
-          \ aws_route53_zone                heroku_addon
-          \ aws_route_table                 heroku_app
-          \ aws_route_table_association     heroku_domain
-          \ aws_s3_bucket                   heroku_drain
-          \
-          \ contained
+""" This is impossible to maintain, Terraform has 70 *aws* resources now.
+""" Just stop trying.  Remove later.
+" syn keyword terraResourceTypeBI
 
 syn keyword terraTodo         contained TODO FIXME XXX BUG
 syn cluster terraCommentGroup contains=terraTodo
@@ -36,8 +22,9 @@ syn region  terraComment      start="/\*" end="\*/" contains=@terraCommentGroup,
 syn region  terraComment      start="#" end="$" contains=@terraCommentGroup,@Spell
 syn region  terraComment      start="//" end="$" contains=@terraCommentGroup,@Spell
 
-syn match  terraResource        /\<resource\>/ nextgroup=terraResourceTypeStr skipwhite
-syn region terraResourceTypeStr start=/"/ end=/"/ contains=terraResourceTypeBI
+""" resource
+syn match  terraResource        /\<resource\>/ nextgroup=terraResourceType skipwhite
+syn region terraResourceType    start=/"/ end=/"/
                               \ nextgroup=terraResourceName skipwhite
 syn region terraResourceName    start=/"/ end=/"/
                               \ nextgroup=terraResourceBlock skipwhite
@@ -73,8 +60,7 @@ hi def link terraBraces            Delimiter
 hi def link terraProviderName      String
 hi def link terraResource          Structure
 hi def link terraResourceName      String
-hi def link terraResourceTypeBI    Tag
-hi def link terraResourceTypeStr   String
+hi def link terraResourceType      Tag
 hi def link terraSection           Structure
 hi def link terraStringInterp      Identifier
 hi def link terraValueBool         Boolean
